@@ -1,0 +1,13 @@
+kafka:
+  bootstrap_servers: "localhost:19092,localhost:29092,localhost:39092"
+  consumer:
+    group_id: "tracedin-span"
+    auto_offset_reset: "earliest"
+    session_timeout_ms: 10000
+    heartbeat_interval_ms: 3000
+    max_poll_interval_ms: 300000
+  producer:
+    client_id: "tracedin-anomaly-model"
+  topics:
+    input_topic: "spanCollectedEvent"
+    output_topic: "anomalyTraceEvent"
