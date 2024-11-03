@@ -47,6 +47,9 @@ async def detect_anomalies_endpoint(spans: List[Span]):
     spans_df = pd.DataFrame([span.dict() for span in spans])
     anomalies = detect_anomalies(spans_df)
 
+    if not anomalies:
+        raise HTTPException(status_code=404, detail="No spans detected")
+
     return anomalies
 
 
