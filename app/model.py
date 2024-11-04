@@ -14,10 +14,12 @@ def detect_anomalies(spans):
     traceId = spans['traceId'].iloc[0]
 
     response_times = spans['duration'].values
-    response_times_reshaped = response_times.reshape(-1, 1)
+    duration_differences = np.diff(response_times, prepend=0)
 
-    threshold = np.median(response_times)
-    mask = response_times <= threshold
+    response_times_reshaped = duration_differences.reshape(-1, 1)
+
+    threshold = np.median(duration_differences)
+    mask = duration_differences <= threshold
 
     scaler = StandardScaler()
     response_times_scaled = scaler.fit_transform(response_times_reshaped)

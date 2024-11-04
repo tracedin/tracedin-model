@@ -24,7 +24,7 @@ def generate_sample_data(num_samples=10, anomaly_ratio=0.05, max_spans_per_trans
 
         spans = []
 
-        for _ in range(num_spans):
+        for idx in range(num_spans):
             span_id = str(uuid.uuid4())
             parent_span_id = str(uuid.uuid4())
             span_name = random.choice(span_names)
@@ -35,10 +35,16 @@ def generate_sample_data(num_samples=10, anomaly_ratio=0.05, max_spans_per_trans
             normal_duration = random.randint(100, 2000)
             anomaly_duration = random.randint(3000, 10000)
 
-            if random.random() < anomaly_ratio:
-                duration = anomaly_duration
+            if idx > 0:
+                if random.random() < anomaly_ratio:
+                    duration = anomaly_duration + spans[-1]['duration']
+                else:
+                    duration = normal_duration + spans[-1]['duration']
             else:
-                duration = normal_duration
+                if random.random() < anomaly_ratio:
+                    duration = anomaly_duration
+                else:
+                    duration = normal_duration
 
             start_time = current_time + random.randint(0, 10000)
             end_time = start_time + duration
