@@ -24,7 +24,7 @@ def detect_anomalies(spans):
     scaler = StandardScaler()
     response_times_scaled = scaler.fit_transform(response_times_reshaped)
 
-    ocsvm = OneClassSVM(kernel='rbf', gamma=0.001, nu=0.2)  # nu: 이상치 비율
+    ocsvm = OneClassSVM(kernel='rbf', gamma=0.001, nu=0.05)  # nu: 이상치 비율
     ocsvm.fit(response_times_scaled)
 
     predictions = ocsvm.predict(response_times_scaled)
