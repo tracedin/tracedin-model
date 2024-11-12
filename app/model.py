@@ -16,6 +16,7 @@ def detect_anomalies(spans):
     response_times = spans['duration'].values
     duration_differences = np.diff(response_times, prepend=0)
 
+    sample_weights = np.where(duration_differences > 500, 3, 1)
     response_times_reshaped = duration_differences.reshape(-1, 1)
 
     threshold = np.median(duration_differences)
@@ -25,7 +26,7 @@ def detect_anomalies(spans):
     response_times_scaled = scaler.fit_transform(response_times_reshaped)
 
     ocsvm = OneClassSVM(kernel='rbf', gamma=0.001, nu=0.05)  # nu: 이상치 비율
-    ocsvm.fit(response_times_scaled)
+    ocsvm.fit(response_times_scaled, sample_weight=sample_weights)
 
     predictions = ocsvm.predict(response_times_scaled)
 
